@@ -14,7 +14,7 @@ let gameId = 0;
 
 let gameName = "Rising Zan: Samurai Gunman";
 let gameSystem = "PlayStation";
-let completion = "69.420%";
+let completion = "69.420";
 
 function init() {
 
@@ -72,7 +72,13 @@ function render() {
     ctx.fillStyle = "yellow";
     ctx.fillRect(30, screen.h-50-20+10, (screen.w-40-20)*(Number.parseFloat(completion)/100), 30)
 
-    //console.log(Number.parseFloat(completion));
+    // draw completion percentage
+    ctx.font = `48px monospace`;
+    drawOutlinedText(
+        (screen.w / 2) - (ctx.measureText(completion).width / 2),
+        screen.h-50-20,
+        48,
+        completion);
 }
 
 function update() {
