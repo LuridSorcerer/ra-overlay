@@ -5,8 +5,8 @@ let delta = 0.0;
 
 const screen = {w:1920, h:1080}; 
 let   scroll = {x:0, y:0}
-const speed  = {x:-100, y:100}
-const blockSize = 200;
+const speed  = {x:-50, y:50}
+const blockSize = 100;
 
 let apikey = "";
 let userName = "";
@@ -14,7 +14,7 @@ let gameId = 0;
 
 let gameName = "Rising Zan: Samurai Gunman";
 let gameSystem = "PlayStation";
-let completion = "420.69%";
+let completion = "69.420%";
 
 function init() {
 
@@ -41,10 +41,11 @@ function init() {
 }
 
 function render() {
-    // ctx.clearRect(0,0,screen.w,screen.h);
-    ctx.fillStyle = "black";
+    // clear background
+    ctx.fillStyle = "darkgray";
     ctx.fillRect(0,0,screen.w,screen.h);
 
+    // draw checkerboard pattern
     ctx.fillStyle = "gray";
     for (let i = 0; i<Math.ceil(screen.w/blockSize)+1; i++) {
             for (let j = 0; j<Math.ceil(screen.h/blockSize)+1; j+=2) {
@@ -60,6 +61,18 @@ function render() {
                 blockSize); 
         }
     }
+
+    // draw game and console
+    drawOutlinedText(50,50,48,gameName);
+    drawOutlinedText(50,98,24,gameSystem);
+
+    // draw completion bar
+    ctx.fillStyle = "black";
+    ctx.fillRect(20,screen.h-50-20,screen.w-40,50);
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(30, screen.h-50-20+10, (screen.w-40-20)*(Number.parseFloat(completion)/100), 30)
+
+    //console.log(Number.parseFloat(completion));
 }
 
 function update() {
@@ -77,6 +90,15 @@ function run() {
     render();
     update();
     requestAnimationFrame(run);
+}
+
+function drawOutlinedText(x, y, size, text) {
+    ctx.font = `${size}px monospace`;
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 8;
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle = "white";
+    ctx.fillText(text,x,y);
 }
 
 function searchGame() {
