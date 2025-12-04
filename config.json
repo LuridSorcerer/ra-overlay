@@ -1,4 +1,11 @@
 {
     "userName": "LuridSorcerer",
-    "gameId": 100
+    "gameId": 100,
+    "blockSize": 200,
+    "color1": "blue",
+    "color2": "darkblue",
+    "speed": {
+		"x": 50,
+		"y": -50
+	}
 }

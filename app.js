@@ -5,8 +5,10 @@ let delta = 0.0;
 
 const screen = {w:1920, h:1080}; 
 let   scroll = {x:0, y:0}
-const speed  = {x:-50, y:50}
-const blockSize = 100;
+let   speed  = {x:-50, y:50}
+let   blockSize = 100;
+let   color1 = "darkgray";
+let   color2 = "lightgray";
 
 let apikey = "";
 let userName = "";
@@ -36,17 +38,22 @@ function init() {
         .then(data => {
             userName = data.userName;
             gameId = data.gameId;
+            color1 = data.color1;
+            color2 = data.color2;
+            blockSize = data.blockSize;
+            speed.x = data.speed.x;
+            speed.y = data.speed.y;
             searchGame();
         })
 }
 
 function render() {
     // clear background
-    ctx.fillStyle = "darkgray";
+    ctx.fillStyle = color1;
     ctx.fillRect(0,0,screen.w,screen.h);
 
     // draw checkerboard pattern
-    ctx.fillStyle = "gray";
+    ctx.fillStyle = color2;
     for (let i = 0; i<Math.ceil(screen.w/blockSize)+1; i++) {
             for (let j = 0; j<Math.ceil(screen.h/blockSize)+1; j+=2) {
             ctx.fillRect( 
