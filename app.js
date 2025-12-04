@@ -55,7 +55,7 @@ function render() {
     // draw checkerboard pattern
     ctx.fillStyle = color2;
     for (let i = 0; i<Math.ceil(screen.w/blockSize)+1; i++) {
-            for (let j = 0; j<Math.ceil(screen.h/blockSize)+1; j+=2) {
+            for (let j = 0; j<Math.ceil(screen.h/blockSize)+2; j+=2) {
             ctx.fillRect( 
                 (i*blockSize)-blockSize+((i%2)*blockSize)+scroll.x, 
                 (j*blockSize)+-blockSize+scroll.y, 
