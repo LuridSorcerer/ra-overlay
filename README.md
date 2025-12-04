@@ -18,7 +18,10 @@ configuration files need to be updated.
 * config.json - update the username and game ID number
 * apikey.json - (not included in repository) create a JSON object 
 containing a property apiKey, set the value to your user account's API 
-key from your RetroAchivements profile. 
+key from your RetroAchivements profile
+* Possibly break apart the scrolling checkerboard background from the 
+data on top. This way, the background and be behind the game source
+and the game information can be on top of it
 
 Host the repository on a local web server (Python's built-in http-server
 module works fine for this). Load the index.html page in OBS as a web
