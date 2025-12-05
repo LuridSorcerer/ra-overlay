@@ -36,7 +36,3 @@ A feed of recent achievements might be useful or interesting.
 
 A game's completion status (Unfinished/Beaten/Mastered) should be 
 displayed somewhere. 
-
-The scrolling direction, checkerboard size, and colors of the background
- are hard-coded. These should be configurable via config.json.
-
