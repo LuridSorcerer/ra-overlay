@@ -1,7 +1,6 @@
 let canvas, ctx;
 
-let prevTime = 0.0;
-let delta = 0.0; 
+let clock = { time: 0.0, prevTime: 0.0, delta: 0.0 }
 
 const screen = {w:1920, h:1080}; 
 let   scroll = {x:0, y:0}
@@ -16,7 +15,7 @@ let gameId = 0;
 
 let gameName = "Rising Zan: Samurai Gunman";
 let gameSystem = "PlayStation";
-let completion = "69.420";
+let completion = { s:"0.0%", x:0 }
 
 function init() {
 
@@ -25,7 +24,7 @@ function init() {
     canvas.height = screen.h;
     canvas.width = screen.w;
 
-    prevTime = Date.now();
+    clock.time = clock.prev = Date.now();
 
     fetch("apikey.json")
         .then(res => res.json())
@@ -45,6 +44,8 @@ function init() {
             speed.y = data.speed.y;
             searchGame();
         })
+        
+        updateCompletionString("69.420");
 }
 
 function render() {
@@ -54,15 +55,18 @@ function render() {
 
     // draw checkerboard pattern
     ctx.fillStyle = color2;
+    // for each column
     for (let i = -1; i<Math.ceil(screen.w/blockSize); i++) {
+			// for every other row
+			let rowOffset = (i%2)*blockSize; 
             for (let j = -1; j<Math.ceil(screen.h/blockSize)+1; j+=2) {
             ctx.fillRect( 
-                (i*blockSize)-blockSize+((i%2)*blockSize)+scroll.x, 
+                (i*blockSize)-blockSize+(rowOffset)+scroll.x, 
                 (j*blockSize)+-blockSize+scroll.y, 
                 blockSize, 
                 blockSize); 
             ctx.fillRect( 
-                (i*blockSize)+((i%2)*blockSize)+scroll.x, 
+                (i*blockSize)+(rowOffset)+scroll.x, 
                 (j*blockSize)+scroll.y, 
                 blockSize, 
                 blockSize); 
@@ -77,25 +81,26 @@ function render() {
     ctx.fillStyle = "black";
     ctx.fillRect(20,screen.h-50-20,screen.w-40,50);
     ctx.fillStyle = "yellow";
-    ctx.fillRect(30, screen.h-50-20+10, (screen.w-40-20)*(Number.parseFloat(completion)/100), 30)
+    ctx.fillRect(30, screen.h-50-20+10, (screen.w-40-20)*(Number.parseFloat(completion.s)/100), 30)
 
     // draw completion percentage
-    ctx.font = `48px monospace`;
     drawOutlinedText(
-        (screen.w / 2) - (ctx.measureText(completion).width / 2),
+		completion.x,
         screen.h-50-20,
         48,
-        completion);
+        completion.s);
 }
 
 function update() {
-    let now = Date.now();
-    delta = (now - prevTime) / 1000;
-    prevTime = now;
+	// update clock
+    clock.time = Date.now();
+    clock.delta = (clock.time - clock.prevTime) / 1000;
+    clock.prevTime = clock.time;
 
-    scroll.x += speed.x * delta;
+	// scroll background
+    scroll.x += speed.x * clock.delta;
     if ( Math.abs(scroll.x) > blockSize) { scroll.x %= blockSize; }
-    scroll.y += speed.y * delta;
+    scroll.y += speed.y * clock.delta;
     if (Math.abs(scroll.y) > blockSize ) { scroll.y %= blockSize; }
 }
 
@@ -103,6 +108,12 @@ function run() {
     render();
     update();
     requestAnimationFrame(run);
+}
+
+function updateCompletionString(text) {
+	ctx.font = "48px monospace";
+	completion.s = text;
+	completion.x = (screen.w/2)-(ctx.measureText(completion.s).width/2);
 }
 
 function drawOutlinedText(x, y, size, text) {
@@ -121,7 +132,7 @@ function searchGame() {
             .then(data => {
                 gameName = data.Title;
                 gameSystem = data.ConsoleName;
-                completion = data.UserCompletionHardcore
+                updateCompletionString(data.UserCompletionHardcore);
                 console.log(data);
                 document.getElementById("output").innerHTML=`${gameName} [${gameSystem}]<br/>${completion}`
                 console.log(gameId);
