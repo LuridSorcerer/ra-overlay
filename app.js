@@ -13,9 +13,9 @@ let apikey = "";
 let userName = "";
 let gameId = 0;
 
-let gameName = "Rising Zan: Samurai Gunman";
-let gameSystem = "PlayStation";
-let completion = { s:"0.0%", x:0 }
+let gameName = "Loading...";
+let gameSystem = "Loading...";
+let completion = { s:"Loading...", x:0 }
 
 function init() {
 
@@ -119,7 +119,7 @@ function updateCompletionString(text) {
 function drawOutlinedText(x, y, size, text) {
     ctx.font = `${size}px monospace`;
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 8;
+    ctx.lineWidth = 2;
     ctx.strokeText(text, x, y);
     ctx.fillStyle = "white";
     ctx.fillText(text,x,y);
@@ -127,18 +127,18 @@ function drawOutlinedText(x, y, size, text) {
 
 function searchGame() {
     if (!isNaN(gameId) && gameId > 0) {
-        /* fetch(`https://retroachievements.org/API/API_GetGameInfoAndUserProgress.php?g=${gameId}&u=${userName}&y=${apikey}`)
+        fetch(`https://retroachievements.org/API/API_GetGameInfoAndUserProgress.php?g=${gameId}&u=${userName}&y=${apikey}`)
             .then(res => res.json())
             .then(data => {
                 gameName = data.Title;
                 gameSystem = data.ConsoleName;
                 updateCompletionString(data.UserCompletionHardcore);
-                console.log(data);
-                document.getElementById("output").innerHTML=`${gameName} [${gameSystem}]<br/>${completion}`
-                console.log(gameId);
-            }) */
+            })
+            .catch(e => {
+                gameName = `Error occured: ${e}`;
+            });
     } else {
-        // document.getElementById("output").innerHTML="Oops!";
+        console.log("Oops!")
     }
 }
 
@@ -146,4 +146,3 @@ window.onload = function() {
     init();
     run();
 }
-
