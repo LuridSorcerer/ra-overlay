@@ -128,7 +128,12 @@ function drawOutlinedText(x, y, size, text) {
 function searchGame() {
     if (!isNaN(gameId) && gameId > 0) {
         fetch(`https://retroachievements.org/API/API_GetGameInfoAndUserProgress.php?g=${gameId}&u=${userName}&y=${apikey}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new error (`HTTP error: ${res.status}`);
+                }
+                return res.json();
+            })
             .then(data => {
                 gameName = data.Title;
                 gameSystem = data.ConsoleName;
