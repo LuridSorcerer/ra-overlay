@@ -44,8 +44,6 @@ function init() {
             speed.y = data.speed.y;
             searchGame();
         })
-        
-        updateCompletionString("69.420");
 }
 
 function render() {
@@ -78,6 +76,7 @@ function render() {
     drawOutlinedText(50,98,24,gameSystem);
 
     // draw completion bar
+    drawOutlinedText(24, screen.h-50-20, 24, "Achievements" );
     ctx.fillStyle = "black";
     ctx.fillRect(20,screen.h-50-20,screen.w-40,50);
     ctx.fillStyle = "yellow";
@@ -86,7 +85,7 @@ function render() {
     // draw completion percentage
     drawOutlinedText(
 		completion.x,
-        screen.h-50-20,
+        screen.h-30,
         48,
         completion.s);
 }
@@ -119,7 +118,7 @@ function updateCompletionString(text) {
 function drawOutlinedText(x, y, size, text) {
     ctx.font = `${size}px monospace`;
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4;
     ctx.strokeText(text, x, y);
     ctx.fillStyle = "white";
     ctx.fillText(text,x,y);
