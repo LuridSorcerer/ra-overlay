@@ -32,6 +32,12 @@ source, and you're good to go.
 Currently, the overlay only grabs the game data once. Eventually, it 
 should periodically check for updates. 
 
+Separating the different componentings into modules (scrolling 
+background, game info display, progress meter). 
+
+Integration into Twitch chat to retrieve game info, trigger refreshes,
+etc. 
+
 A feed of recent achievements might be useful or interesting. 
 
 A game's completion status (Unfinished/Beaten/Mastered) should be 
