@@ -36,6 +36,9 @@ Separating the different components into modules (scrolling
 background, game info display, progress meter). Separate them into 
 foreground and background pages.
 
+Split configuration files to align with the separate modules
+(ra-config.json, bg-config.json, etc.).
+
 Integration into Twitch chat to retrieve game info, trigger refreshes,
 etc. 
 
