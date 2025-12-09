@@ -1,13 +1,6 @@
 let canvas, ctx;
-
 let clock = { time: 0.0, prevTime: 0.0, delta: 0.0 }
-
 const screen = {w:1920, h:1080}; 
-let   scroll = {x:0, y:0}
-let   speed  = {x:-50, y:50}
-let   blockSize = 100;
-let   color1 = "darkgray";
-let   color2 = "lightgray";
 
 let apikey = "";
 let userName = "";
@@ -17,7 +10,59 @@ let gameName = "Loading...";
 let gameSystem = "Loading...";
 let completion = { s:"Loading...", x:0 }
 
+let bg = { canvas: null, ctx: null, w: 1920, h: 1080, 
+	blocksize: 100, color1: "darkgray", color2: "gray",
+	scroll: {x: 0, y: 0}, speed: {x: 50, y: 50}, 
+	init: function () {
+		// create canvas and context
+		this.canvas = document.createElement('canvas');	
+		this.canvas.width = this.w;
+		this.canvas.height = this.h;
+		this.ctx = this.canvas.getContext('2d');
+	}, 
+	update: function (delta) { 	
+		// scroll background
+		this.scroll.x += this.speed.x * delta;
+		if ( Math.abs(this.scroll.x) > this.blocksize*2) {
+			this.scroll.x %= this.blocksize*2;
+		}
+		this.scroll.y += this.speed.y * delta;
+		if ( Math.abs(this.scroll.y) > this.blocksize*2) {
+			this.scroll.y %= this.blocksize*2;
+		}
+	},
+	render: function () {
+		// clear background
+		this.ctx.fillStyle = this.color1;
+		this.ctx.fillRect(0,0,this.w,this.h);
+
+		// draw checkerboard pattern
+		this.ctx.fillStyle = this.color2;
+		// for each column
+		for (let i = -1; i<Math.ceil(this.w/this.blockSize); i++) {
+			// for every other row
+			let rowOffset = (i%2)*this.blockSize; 
+			for (let j = -1; j<Math.ceil(this.h/this.blockSize)+1; j+=2) {
+			// upper-left square
+			this.ctx.fillRect( 
+				(i*this.blocksize) -this.blocksize + rowOffset + this.scroll.x,
+				(j*this.blocksize) - this.blocksize + this.scroll.y,
+				this.blocksize, 
+				this.blocksize);
+			 // lower-right square
+			this.ctx.fillRect( 
+				(i*this.blocksize) + rowOffset + this.scroll.x,
+				(j*this.blocksize) + this.scroll.y,
+				this.blockSize, 
+				this.blockSize);
+			}
+		}
+	} 
+}
+
 function init() {
+
+	bg.init();
 
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
@@ -37,40 +82,20 @@ function init() {
         .then(data => {
             userName = data.userName;
             gameId = data.gameId;
-            color1 = data.color1;
-            color2 = data.color2;
-            blockSize = data.blockSize;
-            speed.x = data.speed.x;
-            speed.y = data.speed.y;
+            bg.color1 = data.color1;
+            bg.color2 = data.color2;
+            bg.blockSize = data.blockSize;
+            bg.speed.x = data.speed.x;
+			bg.speed.y = data.speed.y;
             searchGame();
         })
 }
 
 function render() {
-    // clear background
-    ctx.fillStyle = color1;
-    ctx.fillRect(0,0,screen.w,screen.h);
-
-    // draw checkerboard pattern
-    ctx.fillStyle = color2;
-    // for each column
-    for (let i = -1; i<Math.ceil(screen.w/blockSize); i++) {
-			// for every other row
-			let rowOffset = (i%2)*blockSize; 
-            for (let j = -1; j<Math.ceil(screen.h/blockSize)+1; j+=2) {
-            ctx.fillRect( 
-                (i*blockSize)-blockSize+(rowOffset)+scroll.x, 
-                (j*blockSize)+-blockSize+scroll.y, 
-                blockSize, 
-                blockSize); 
-            ctx.fillRect( 
-                (i*blockSize)+(rowOffset)+scroll.x, 
-                (j*blockSize)+scroll.y, 
-                blockSize, 
-                blockSize); 
-        }
-    }
-
+	// blit bg canvas
+	bg.render();
+	ctx.drawImage(bg.canvas, 0,0);
+	
     // draw game and console
     drawOutlinedText(50,50,48,gameName);
     drawOutlinedText(50,98,24,gameSystem);
@@ -96,11 +121,8 @@ function update() {
     clock.delta = (clock.time - clock.prevTime) / 1000;
     clock.prevTime = clock.time;
 
-	// scroll background
-    scroll.x += speed.x * clock.delta;
-    if ( Math.abs(scroll.x) > blockSize) { scroll.x %= blockSize; }
-    scroll.y += speed.y * clock.delta;
-    if (Math.abs(scroll.y) > blockSize ) { scroll.y %= blockSize; }
+	// update bg
+	bg.update(clock.delta);
 }
 
 function run() {
