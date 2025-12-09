@@ -32,8 +32,9 @@ source, and you're good to go.
 Currently, the overlay only grabs the game data once. Eventually, it 
 should periodically check for updates. 
 
-Separating the different componentings into modules (scrolling 
-background, game info display, progress meter). 
+Separating the different components into modules (scrolling 
+background, game info display, progress meter). Separate them into 
+foreground and background pages.
 
 Integration into Twitch chat to retrieve game info, trigger refreshes,
 etc. 
