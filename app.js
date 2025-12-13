@@ -1,9 +1,9 @@
 let canvas, ctx;
 const screen = {w:1920, h:1080}; 
 
-import { bg } from "./bg.mjs";
-import { clock } from "./clock.mjs";
-import { ra_overlay } from "./ra_overlay.mjs";
+import { bg } from "./modules/bg.mjs";
+import { clock } from "./modules/clock.mjs";
+import { ra_overlay } from "./modules/ra_overlay.mjs";
 
 function init() {
     clock.init();
