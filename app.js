@@ -1,5 +1,4 @@
 let canvas, ctx;
-let clock = { time: 0.0, prevTime: 0.0, delta: 0.0 }
 const screen = {w:1920, h:1080}; 
 
 let apikey = "";
@@ -11,17 +10,16 @@ let gameSystem = "Loading...";
 let completion = { s:"Loading...", x:0 }
 
 import { bg } from "./bg.mjs";
+import { clock } from "./clock.mjs";
 
 function init() {
-
+    clock.init();
 	bg.init();
 
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
     canvas.height = screen.h;
     canvas.width = screen.w;
-
-    clock.time = clock.prev = Date.now();
 
     fetch("apikey.json")
         .then(res => res.json())
@@ -69,9 +67,7 @@ function render() {
 
 function update() {
 	// update clock
-    clock.time = Date.now();
-    clock.delta = (clock.time - clock.prevTime) / 1000;
-    clock.prevTime = clock.time;
+    clock.update();
 
 	// update bg
 	bg.update(clock.delta);
