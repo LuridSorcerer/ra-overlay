@@ -46,3 +46,6 @@ A feed of recent achievements might be useful or interesting.
 
 A game's completion status (Unfinished/Beaten/Mastered) should be 
 displayed somewhere. 
+
+Might be useful to have controls on a separate page. Communication
+between the two can be done via websockets. 
